@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Applicant</title>
+    <style>
+        form {
+            text-align: left;
+            padding: 2rem;
+            box-shadow: 0 0 4px 1px black;
+        }
+    </style>
+    <script src="angular.js"></script>
+</head>
+
+<body ng-app="applicant" ng-controller="af">
+    <center>
+        <div style="background-color:rgb(0, 255, 229); width: 500px;">
+            <h2 style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Applicant Form</h2>
+        </div>
+    </center>
+    <center>
+        <div style="width: 500px;">
+            <form action="">
+                Enter the first name: <input type="text" placeholder="First Name" ng-model="m1" id="1"><br><br>
+                Enter the last name : <input type="text" placeholder="Last Name" ng-model="m2" id="2"><br><br>
+                Specifications : <select name="Specifications" id="3" ng-model="m3">
+                    <option value="" disabled selected>Choose an option</option>
+                    <option value="Individual">Individual</option>
+                    <option value="Organizations">Organizations</option>
+                    <option value="Institute">Institute</option>
+                    <option value="Government">Government Entity</option>
+                </select><br><br>
+                Address: <textarea name="add" id="add" cols="27" rows="9" ng-model="m4" id="4"></textarea><br><br>
+                Postal code: <input type="number" placeholder="ZIP Code" ng-model="m5" id="5"><br><br>
+                Phone: <input type="number" ng-model="m6" id="6"><br><br>
+                Date: <input type="date" ng-model="m7" id="7"><br><br>
+            </form><br>
+
+        </div>
+        <div style="width: 500px; text-align:right"><input type="button" value="Add Applicant" class="1" ng-click="locate()"></div>
+    </center>
+</body>
+
+<script>
+    const myvar = angular.module("applicant", [])
+        .controller("af", function ($scope, $window) {
+            let applicantId;
+            $scope.locate = function () {
+                if ($scope.m1 == "" || $scope.m1 == undefined) {
+                    alert("First Name is required")
+                    document.getElementById("1").focus()
+                } else if ($scope.m2 == "" || $scope.m2 == undefined) {
+                    alert("Last Name is required")
+                    document.getElementById("2").focus()
+                } else if ($scope.m3 == "" || $scope.m3 == undefined) {
+                    alert("Specify the category")
+                } else if ($scope.m4 == "" || $scope.m4 == undefined) {
+                    alert("Address is mandatory")
+                    document.getElementById("4").focus()
+                } else if ($scope.m5 == "" || $scope.m5 == undefined) {
+                    alert("Enter the postal code")
+                    document.getElementById("5").focus()
+                } else if ($scope.m6 == "" || $scope.m6 == undefined) {
+                    alert("Phone number is required")
+                    document.getElementById("6").focus()
+                } else if ($scope.m7 == "" || $scope.m7 == undefined) {
+                    alert("Specify the date")
+
+                } else {
+                    var applicantData = {
+                        firstName: $scope.m1,
+                        lastName: $scope.m2,
+                        category: $scope.m3,
+                        address: $scope.m4,
+                        postalCode: $scope.m5,
+                        phone: $scope.m6
+                    };
+
+                    fetch('http://localhost:3500/applicant',{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type':'application/json'
+                        },
+                        body:JSON.stringify(applicantData)
+                    }).then(res=>{
+                        return res.json();
+                    }).then(data =>{
+                        console.log(data)
+                        applicantId = data.data._id;
+                        localStorage.clear()
+                        localStorage.setItem("ApplicantId",applicantId)
+                        alert("You can close this window.")
+                        $window.close()
+                    })
+                    
+                }
+            }
+
+        })
+</script>
+
+</html>

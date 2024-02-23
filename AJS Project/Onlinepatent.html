@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Government</title>
+    <script src="angular.js"></script>
+</head>
+
+<body ng-app="patent" ng-controller="pf">
+    <center>
+        <h2 style="font-family: Arial, Helvetica, sans-serif;">Office of the Controller General of Patents, Designs <br>
+            and Trademarks Department for promotion of industry
+            and internal trade. </h2>
+        <h3>Government of India</h3>
+        <img src="India.jpg" alt="" style="height: 180px; width: 200px;">
+
+    </center>
+    <div style="padding:2rem;">
+        <div style="width:250px; background-color: orange;height:60px">
+            <h2>Rules and Regulations</h2>
+        </div>
+        <ol>
+            <li>Provide accurate and complete information.</li>
+            <li>Ensure clear and concise description of the invention.</li>
+            <li>Draft clear and specific claims.</li>
+            <li>Disclose relevant prior art.</li>
+            <li>List accurate inventors.</li>
+            <li>Ensure compliance with patent laws and regulations.</li>
+        </ol>
+        <input type="checkbox" ng-model="check"> I accept the entire Rules and Regulations to be complied while filling this
+        form.
+    </div>
+    <div ng-show="check" style="padding:2rem;">
+        <div style="background-color: white;border:solid 2px black; width:250px; height:60px; text-align: center;padding:none;">
+            <h2>Applicant Form</h2>
+        </div>
+        <h2>Introduction</h2>
+        <p>Welcome to the Applicant Patent Form! This form is designed to facilitate the submission of patent applications for innovative inventions. Before proceeding to fill out the form, please read through the following description to understand the purpose and requirements of the patent application process.</p>
+        <h2>Purpose of the form</h2>
+        <p>The Applicant Patent Form serves as the official document for submitting a patent application to the Office of the Controller General of Patents, Designs, and Trademarks. It allows inventors to protect their intellectual property rights by obtaining legal recognition and exclusive rights to their inventions.</p>
+        <h3>To fill out the applicant form click here: </h3><button ng-click="locateapp()">Click here</button><br><br>
+        <div style="background-color: green;border:solid 2px; width:250px; height:60px; text-align: center;padding:none;">
+            <h2>Inventor Form</h2>
+        </div>
+        <h2>Introduction</h2>
+        <p>Welcome to the Inventor Patent Form! This form is designed to facilitate the submission of patent applications for innovative inventions. Before proceeding to fill out the form, please read through the following description to understand the purpose and requirements of the patent application process for inventors.</p>
+        <h2>Purpose of the form</h2>
+        <p>The Inventor Patent Form serves as the official document for submitting a patent application to the Office of the Controller General of Patents, Designs, and Trademarks. It allows inventors to protect their intellectual property rights by obtaining legal recognition and exclusive rights to their inventions.</p>
+        <h3>To fill out the inventor form click here: </h3><button ng-click="locateinv()">Click here</button><br><br>
+        <h4>If you have completed filling the forms, save it to record your form</h4>
+        <button ng-click="saveForms()">Save</button>
+    </div>
+    <script>
+        const myvar = angular.module("patent", [])
+            .controller("pf", function($scope, $window) {
+                $scope.check = false;
+                $scope.applicantData = {};
+                $scope.inventorData = {};
+
+                $scope.locateapp = function() {
+                    $window.open("Applicant.html", "_blank");
+                }
+
+                $scope.locateinv = function() {
+                    $window.open("Inventor.html", "_blank");
+                }
+
+                $scope.saveForms = function() {
+                    console.log("Yaha ta thichyo")
+                    const { ApplicantId , InventorId } = localStorage;
+                    fetch('http://localhost:3500/form',{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type':'application/json'
+                        },
+                        body: JSON.stringify({applicantId: ApplicantId , inventorId: InventorId})
+                    }).then(res => res.json())
+                    .then(data => {
+                        console.log(data)
+                        $window.open("display.html", "_blank");
+                        // localStorage.clear()
+                    })
+                }
+            });
+    </script>
+</body>
+
+</html>

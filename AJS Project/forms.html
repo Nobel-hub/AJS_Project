@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <title>Forms</title>
+        <script src="angular.js"></script>
+    </head>
+    <body ng-app="table" ng-controller="tf">
+        <h1 style="text-align: center; font-style: italic;">Online patent registration form database</h1>
+        <table border="1">
+            <tr>
+                <th style="width:100px">Forms</th>
+                <th style="width:300px;">Date</th>
+                <th style="width:200px;">Link</th>
+            </tr>
+            <tr ng-repeat="form in forms">
+                <td>Form {{$index + 1}}</td>
+                <td>{{form.createdAt | date : m}}</td>
+                <td><a href="http://127.0.0.1:5500/AJS%20Project/display.html/">Click here</a></td>
+            </tr>
+            <tr>
+
+            </tr>
+        </table><br>
+        <button ng-click="locate()">Apply for new form</button>
+    </body>
+</html>
+<script>
+    const myvar = angular.module("table", [])
+    myvar.controller("tf", function($scope, $window){
+        $scope.formcount = 1;
+        
+        $scope.forms = [];
+        $scope.applicantId;
+        $scope.link = "http://127.0.0.1:5500/AJS%20Project/display.html/"+$scope.applicantId
+        $scope.inventorId;
+        var i = 1;
+        
+        fetch('http://localhost:3500/applicant/all')
+        .then((res)=>{
+            return res.json()
+        }).then(
+            data => {
+                $scope.forms.push(...data.data)
+                console.log($scope.forms[0])
+                $scope.$apply()
+
+            }
+        )
+
+        $scope.locate = function(){
+           $window.open("Onlinepatent.html", "_blank");
+        }
+    })
+</script>
