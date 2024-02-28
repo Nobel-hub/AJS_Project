@@ -27,19 +27,8 @@
         myApp.controller('myCtrl',($scope)=>{
             const applicantId = localStorage.getItem('ApplicantId')
             const inventorId = localStorage.getItem("InventorId")
-            fetch('http://localhost:3500/form',{method: 'GET',headers: {'Content-Type':'application/json'},body:JSON.stringify({applicantId})})
-            fetch('http://localhost:3500/form',{method: 'GET',headers: {'Content-Type':'application/json'},body:JSON.stringify({inventorId})})
-            .then(res => res.json())
-            .then( data => {
-                const inventorId = data.data.inventorId
-                fetch(`http://localhost:3500/inventor/id/${inventorId}`)
-            .then(res => res.json())
-            .then(data => {
-                console.log(data.data)
-                $scope.inventorData = data.data
-                $scope.$apply()
-            })
-            })
+
+            // Fetch applicant details
             fetch(`http://localhost:3500/applicant/id/${applicantId}`)
             .then(res => res.json())
             .then(data => {
@@ -47,10 +36,16 @@
                 $scope.applicantData = data.data
                 $scope.$apply()
             })
-            
-            
+
+            // Fetch inventor details
+            fetch(`http://localhost:3500/inventor/id/${inventorId}`)
+            .then(res => res.json())
+            .then(data => {
+                console.log(data.data)
+                $scope.inventorData = data.data
+                $scope.$apply()
+            })  
         })
     </script>
 </body>
 </html>
-
