@@ -20,28 +20,39 @@
     Category of invention: {{inventorData.InventionCategory}} <br>
     Phone: {{inventorData.Phone}} <br>
     Address: {{inventorData.Address}} <br>
-    Postal Code: {{inventorData.PostalCode}} <br>
+    Postal Code: {{inventorData.PostalCode}} <br> <br>
+
+    <button ng-click="downloadForm()">Download Form</button>
 
     <script>
         const myApp = angular.module('myApp',[])
         myApp.controller('myCtrl',($scope)=>{
+            $scope.formCount = 1;
+
+            $scope.downloadForm = function() {
+                const content = document.documentElement.outerHTML;
+                const blob = new Blob([content], { type: 'text/html' });
+                const anchor = document.createElement('a');
+                const filename = $scope.formCount + '.html';
+                anchor.href = URL.createObjectURL(blob);
+                anchor.download = filename;
+                $scope.formCount++;
+                anchor.click();
+            }
+
             const applicantId = localStorage.getItem('ApplicantId')
             const inventorId = localStorage.getItem("InventorId")
 
-            // Fetch applicant details
             fetch(`http://localhost:3500/applicant/id/${applicantId}`)
             .then(res => res.json())
             .then(data => {
-                console.log(data.data)
                 $scope.applicantData = data.data
                 $scope.$apply()
             })
 
-            // Fetch inventor details
             fetch(`http://localhost:3500/inventor/id/${inventorId}`)
             .then(res => res.json())
             .then(data => {
-                console.log(data.data)
                 $scope.inventorData = data.data
                 $scope.$apply()
             })  

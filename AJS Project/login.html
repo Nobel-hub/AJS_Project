@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <meta charset="utf8">
+        <title>Login</title>
+        <script src="angular.js"></script>
+    </head>
+    <body ng-app="login" ng-controller="loginfn">
+        <h2 style="text-align: center;">Login Form</h2>
+        <div style="text-align: center;">
+            Enter the email: <input type="Email" ng-model="email" id="a"><br><br>
+            Enter the password: <input type="password" ng-model="password" id="b"><br><br>
+            <center><input type="button" value="Login" ng-click="goto()"></center>
+        </div>
+    </body>
+</html>
+<script>
+    let myvar = angular.module("login", [])
+    myvar.controller("loginfn", ($scope, $window)=>{
+        $scope.goto = function(){
+            if($scope.email == null || $scope.email == undefined){
+                alert("Email is mandatory.")
+                document.getElementById("a").focus()
+            }
+            else if($scope.password == null || $scope.password == undefined){
+                alert("Enter the password")
+                document.getElementById("b").focus()
+            }
+            else{
+                alert("Sucessfully Logged In. Redirecting......");
+                $window.location.href = "Onlinepatent.html";
+
+            }
+        }
+    })
+</script>

@@ -1,53 +1,45 @@
 <html>
-    <head>
-        <title>Forms</title>
-        <script src="angular.js"></script>
-    </head>
-    <body ng-app="table" ng-controller="tf">
-        <h1 style="text-align: center; font-style: italic;">Online patent registration form database</h1>
-        <table border="1">
-            <tr>
-                <th style="width:100px">Forms</th>
-                <th style="width:300px;">Date</th>
-                <th style="width:200px;">Link</th>
-            </tr>
-            <tr ng-repeat="form in forms">
-                <td>Form {{$index + 1}}</td>
-                <td>{{form.createdAt | date : m}}</td>
-                <td><a href="http://127.0.0.1:5500/AJS%20Project/display.html/">Click here</a></td>
-            </tr>
-            <tr>
+<head>
+    <title>Forms</title>
+    <script src="angular.js"></script>
+</head>
 
-            </tr>
-        </table><br>
-        <button ng-click="locate()">Apply for new form</button>
-    </body>
+<body ng-app="table" ng-controller="tf">
+    <h1 style="text-align: center; font-style: italic;">Online patent registration form database</h1>
+    <table border="1">
+        <tr>
+            <th style="width:100px">Forms</th>
+            <th style="width:300px;">Date</th>
+            <th style="width:200px;">Link</th>
+        </tr>
+        <tr ng-repeat="form in forms">
+            <td>Form {{$index + 1}}</td>
+            <td>{{form.createdAt | date : 'M/dd/yyyy'}}</td>
+            <td><a ng-href="/Users/nobeldhakal/Downloads/{{$index+1}}.html" target="_blank">Click here</a></td>
+        </tr>
+    </table><br><br>
+    <button ng-click="locate()">Apply for new form</button>
+</body>
 </html>
 <script>
     const myvar = angular.module("table", [])
-    myvar.controller("tf", function($scope, $window){
-        $scope.formcount = 1;
-        
+    myvar.controller("tf", function ($scope, $window) {
         $scope.forms = [];
-        $scope.applicantId;
-        $scope.link = "http://127.0.0.1:5500/AJS%20Project/display.html/"+$scope.applicantId
-        $scope.inventorId;
-        var i = 1;
         
         fetch('http://localhost:3500/applicant/all')
-        .then((res)=>{
-            return res.json()
-        }).then(
-            data => {
-                $scope.forms.push(...data.data)
-                console.log($scope.forms[0])
-                $scope.$apply()
+            .then(res => res.json())
+            .then(data => {
+                $scope.forms = data.data;
+                $scope.$apply();
+            })
+            .catch(error => console.error('Error fetching forms:', error));
 
-            }
-        )
+        $scope.generateLink = function(index) {
+            return "/Users/nobeldhakal/Downloads/" + (index + 1) + ".html";
+        };
 
-        $scope.locate = function(){
-           $window.open("Onlinepatent.html", "_blank");
-        }
-    })
+        $scope.locate = function () {
+            $window.open("Onlinepatent.html", "_blank");
+        };
+    });
 </script>
